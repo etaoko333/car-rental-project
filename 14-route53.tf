@@ -1,12 +1,12 @@
 # Get hosted zone details
 data "aws_route53_zone" "hosted_zone" {
-  name = var.domain_name
+  name = "eta-oko.com"  # Make sure this matches exactly
 }
 
 # Create a record set in Route 53
 resource "aws_route53_record" "record_name" {
   zone_id = data.aws_route53_zone.hosted_zone.zone_id
-  name    = var.record_name
+  name    = "app.eta-oko.com"  # Specify the subdomain or root domain
   type    = "A"
 
   alias {
