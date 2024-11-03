@@ -1,19 +1,10 @@
-# Allocate Elastic IP for NAT Gateway in AZ1
 resource "aws_eip" "eip1" {
-  vpc = true
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-eip1"
-  }
+  domain = "vpc"
+  # other attributes...
 }
-
-# Allocate Elastic IP for NAT Gateway in AZ2
 resource "aws_eip" "eip2" {
-  vpc = true
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-eip2"
-  }
+  domain = "vpc"
+  # other attributes...
 }
 
 # Create NAT Gateway in Public Subnet AZ1
