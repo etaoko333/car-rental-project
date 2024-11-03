@@ -1,107 +1,110 @@
-# environment variables
+# Environment variables
 variable "region" {
-  description = "region to create resources"
-  type = string
+  description = "Region to create resources"
+  type        = string
+  default     = "us-west-1"  # Default to your specified region
 }
 
 variable "project_name" {
-  description = "project name"
-  type = string
+  description = "Project name"
+  type        = string
 }
 
 variable "environment" {
-  description = "environment"
-  type = string
+  description = "Environment"
+  type        = string
 }
 
-# vpc variables
+# VPC variables
 variable "vpc_cidr" {
-  description = "vpc cidr block"
-  type = string
+  description = "VPC CIDR block"
+  type        = string
 }
 
 variable "public_subnet_az1_cidr" {
-  description = "public subnet az1 cidr block"
-  type = string
+  description = "Public subnet AZ1 CIDR block"
+  type        = string
 }
 
 variable "public_subnet_az2_cidr" {
-  description = "public subnet az2 cidr block"
-  type = string
+  description = "Public subnet AZ2 CIDR block"
+  type        = string
 }
 
 variable "private_app_subnet_az1_cidr" {
-  description = "private subnet az1 cidr block"
-  type = string
+  description = "Private app subnet AZ1 CIDR block"
+  type        = string
 }
 
 variable "private_app_subnet_az2_cidr" {
-  description = "private subnet az2 cidr block"
-  type = string
+  description = "Private app subnet AZ2 CIDR block"
+  type        = string
 }
 
 variable "private_data_subnet_az1_cidr" {
-  description = "private data subnet az1 cidr block"
-  type = string
+  description = "Private data subnet AZ1 CIDR block"
+  type        = string
 }
 
 variable "private_data_subnet_az2_cidr" {
-  description = "private data subnet az2 cidr block"
-  type = string
+  description = "Private data subnet AZ2 CIDR block"
+  type        = string
 }
 
 # Security groups variable
 variable "ssh_location" {
-  description = "ip address that can ssh into the servers"
-  type = string
+  description = "IP address that can SSH into the servers"
+  type        = string
 }
 
-# rds variables
+# RDS variables
 variable "db_master_username" {
-  description = "database username"
-  type = string
+  description = "Database username"
+  type        = string
 }
 
 variable "db_master_password" {
-  description = "database password"
-  type = string
+  description = "Database password"
+  type        = string
 }
 
-# acm variables
+# ACM variables
 variable "domain_name" {
-  description = "domain name"
-  type = string
+  description = "Domain name"
+  type        = string
+  default     = "eta-oko.com"  # Set default domain name
 }
 
 variable "alternative_names" {
-  description = "sub domain name"
-  type = string
+  description = "List of subdomain names"
+  type        = list(string)
+  default     = ["eta-oko.com", "www.eta-oko.com"]  # Include main domain and subdomain
 }
 
 # S3 variables
 variable "env_file_bucket_name" {
-  description = "s3 bucket name"
-  type = string
+  description = "S3 bucket name"
+  type        = string
 }
 
 variable "env_file_name" {
-  description = "env file name"
-  type = string
+  description = "Environment file name"
+  type        = string
 }
 
 # ECS variables
 variable "architecture" {
-  description = "ecs cpu architecture"
-  type = string
+  description = "ECS CPU architecture"
+  type        = string
 }
 
 variable "container_image" {
-  description = "container image uri"
-  type = string
+  description = "Container image URI"
+  type        = string
 }
 
-# Route53 variables
+# Route 53 variables
 variable "record_name" {
-  description = "sub domain name"
-  type = string
+  description = "Subdomain name"
+  type        = string
 }
