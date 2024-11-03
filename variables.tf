@@ -1,110 +1,36 @@
 # Environment variables
-variable "region" {
-  description = "Region to create resources"
-  type        = string
-  default     = "us-west-1"  # Default to your specified region
-}
-
-variable "project_name" {
-  description = "Project name"
-  type        = string
-}
-
-variable "environment" {
-  description = "Environment"
-  type        = string
-}
+region = "us-west-1"
+project_name = "autorentify"
+environment = "dev" 
 
 # VPC variables
-variable "vpc_cidr" {
-  description = "VPC CIDR block"
-  type        = string
-}
-
-variable "public_subnet_az1_cidr" {
-  description = "Public subnet AZ1 CIDR block"
-  type        = string
-}
-
-variable "public_subnet_az2_cidr" {
-  description = "Public subnet AZ2 CIDR block"
-  type        = string
-}
-
-variable "private_app_subnet_az1_cidr" {
-  description = "Private app subnet AZ1 CIDR block"
-  type        = string
-}
-
-variable "private_app_subnet_az2_cidr" {
-  description = "Private app subnet AZ2 CIDR block"
-  type        = string
-}
-
-variable "private_data_subnet_az1_cidr" {
-  description = "Private data subnet AZ1 CIDR block"
-  type        = string
-}
-
-variable "private_data_subnet_az2_cidr" {
-  description = "Private data subnet AZ2 CIDR block"
-  type        = string
-}
+vpc_cidr = "10.0.0.0/16"
+public_subnet_az1_cidr = "10.0.0.0/24"
+public_subnet_az2_cidr = "10.0.1.0/24"
+private_app_subnet_az1_cidr = "10.0.2.0/24"
+private_app_subnet_az2_cidr = "10.0.3.0/24"
+private_data_subnet_az1_cidr = "10.0.4.0/24"
+private_data_subnet_az2_cidr = "10.0.5.0/24"
 
 # Security groups variable
-variable "ssh_location" {
-  description = "IP address that can SSH into the servers"
-  type        = string
-}
+ssh_location = "your_ip_address"  # Replace with your actual IP address
 
 # RDS variables
-variable "db_master_username" {
-  description = "Database username"
-  type        = string
-}
-
-variable "db_master_password" {
-  description = "Database password"
-  type        = string
-}
+db_master_username = "your_rds_username"  # Replace with your RDS username
+db_master_password = "your_rds_password"  # Replace with your RDS password
 
 # ACM variables
-variable "domain_name" {
-  description = "Domain name"
-  type        = string
-  default     = "eta-oko.com"  # Set default domain name
-}
+domain_name = "your_domain_name"  # Replace with your hosted zone name in Route 53
+alternative_names = ["*.eta-oko.com"]  # Reflecting your domain
 
-variable "alternative_names" {
-  description = "List of subdomain names"
-  type        = list(string)
-  default     = ["eta-oko.com", "www.eta-oko.com"]  # Include main domain and subdomain
-}
 
 # S3 variables
-variable "env_file_bucket_name" {
-  description = "S3 bucket name"
-  type        = string
-}
-
-variable "env_file_name" {
-  description = "Environment file name"
-  type        = string
-}
+env_file_bucket_name = "ecs-env-file-bucket-st"
+env_file_name = "rentzone.env"
 
 # ECS variables
-variable "architecture" {
-  description = "ECS CPU architecture"
-  type        = string
-}
-
-variable "container_image" {
-  description = "Container image URI"
-  type        = string
-}
+architecture = "X86_64"  # X86_64 for Windows; ARM64 for Mac
+container_image = "your_container_image"  # Replace with your container image URI
 
 # Route 53 variables
-variable "record_name" {
-  description = "Subdomain name"
-  type        = string
-}
+record_name = "www"
