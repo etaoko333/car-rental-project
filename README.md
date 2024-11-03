@@ -8,7 +8,7 @@ This project stands out for its use of a wide array of AWS services, ensuring hi
 
 ## Create a new repository on GitHub.
 
-I’ve named mine: “car_rental_dynamic_web_app”
+I’ve named mine: “car-rental-project”
 
 ## Create the remote backend
 
