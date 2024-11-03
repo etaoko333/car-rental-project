@@ -16,7 +16,7 @@ resource "aws_instance" "bastion" {
   ami                    = "ami-0cf4e1fcfd8494d5b"  # Replace with correct AMI ID for us-west-1
   instance_type          = "t2.micro"
   key_name               = "project3"  # Correct syntax for the key pair name
-  availability_zone      = "us-west-1"  # Updated to us-west-1a
+  availability_zone      = "us-west-1a"  # Updated to us-west-1a
   subnet_id              = data.aws_subnet.public_subnet_az1.id  # Use Public Subnet AZ1
   vpc_security_group_ids = [data.aws_security_group.bastion_sg.id]  # Use Bastion SG by ID
 
