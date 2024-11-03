@@ -21,7 +21,8 @@ db_master_password = "your_rds_password"  # Replace with your RDS password
 
 # ACM variables
 domain_name = "your_domain_name"  # Replace with your hosted zone name in Route 53
-alternative_names = "*.your_domain_name"  # Replace with your alternative names
+alternative_names = ["*.eta-oko.com"]  # Reflecting your domain
+
 
 # S3 variables
 env_file_bucket_name = "ecs-env-file-bucket-st"
