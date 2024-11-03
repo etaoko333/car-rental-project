@@ -1,5 +1,4 @@
 # Request public certificates from the Amazon Certificate Manager.
-# You are required to have a domain name registered in Route 53.
 resource "aws_acm_certificate" "acm_certificate" {
   domain_name               = var.domain_name
   subject_alternative_names = var.alternative_names  # Ensure this is a list
@@ -10,10 +9,9 @@ resource "aws_acm_certificate" "acm_certificate" {
   }
 }
 
-# Get details about a Route 53 hosted zone
+# Get details about a Route 53 hosted zone using the ID
 data "aws_route53_zone" "route53_zone" {
-  name         = var.domain_name
-  private_zone = false
+  zone_id = "Z0313232XJD76NI3Q86M"  # Use your hosted zone ID directly
 }
 
 # Create a record set in Route 53 for domain validation
@@ -26,12 +24,11 @@ resource "aws_route53_record" "route53_record" {
     }
   }
 
-  allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = data.aws_route53_zone.route53_zone.zone_id
+  zone_id = data.aws_route53_zone.route53_zone.zone_id
+  name     = each.value.name
+  ttl      = 60
+  type     = each.value.type
+  records  = [each.value.record]
 }
 
 # Validate ACM certificates
