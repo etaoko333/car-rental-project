@@ -1,38 +1,67 @@
-# Request public certificates from the Amazon Certificate Manager.
-resource "aws_acm_certificate" "acm_certificate" {
-  domain_name               = var.domain_name
-  subject_alternative_names = var.alternative_names  # Ensure this is a list
-  validation_method         = "DNS"
+# create application load balancer
+resource "aws_lb" "application_load_balancer" {
+  name                       = "${var.project_name}-${var.environment}-alb"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.alb_security_group.id]
+  subnets                    = [
+    aws_subnet.public_subnet_az1.id, 
+    aws_subnet.public_subnet_az2.id
+  ]
+  enable_deletion_protection = false
 
-  lifecycle {
-    create_before_destroy = true
+  tags   = {
+    Name = "${var.project_name}-${var.environment}-alb"
   }
 }
 
-# Get details about a Route 53 hosted zone using the ID
-data "aws_route53_zone" "route53_zone" {
-  zone_id = "Z0313232XJD76NI3Q86M"  # Use your hosted zone ID directly
+# create target group
+resource "aws_lb_target_group" "alb_target_group" {
+  name        = "${var.project_name}-${var.environment}-tg"
+  target_type = "ip"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.vpc.id
+
+  health_check {
+    healthy_threshold   = 5
+    interval            = 30
+    matcher             = "200,301,302" #301,302 is for when we redirect traffic to https
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    unhealthy_threshold = 2
+  }
 }
 
-# Create a record set in Route 53 for domain validation
-resource "aws_route53_record" "route53_record" {
-  for_each = {
-    for dvo in aws_acm_certificate.acm_certificate.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
+# create a listener on port 80 with redirect action
+resource "aws_lb_listener" "alb_http_listener" {
+  load_balancer_arn = aws_lb.application_load_balancer.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
     }
   }
-
-  zone_id = data.aws_route53_zone.route53_zone.zone_id
-  name     = each.value.name
-  ttl      = 60
-  type     = each.value.type
-  records  = [each.value.record]
 }
 
-# Validate ACM certificates
-resource "aws_acm_certificate_validation" "acm_certificate_validation" {
-  certificate_arn         = aws_acm_certificate.acm_certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.route53_record : record.fqdn]
+# create a listener on port 443 with forward action
+resource "aws_lb_listener" "alb_https_listener" {
+  load_balancer_arn  = aws_lb.application_load_balancer.arn
+  port               = 443
+  protocol           = "HTTPS"
+  ssl_policy         = "ELBSecurityPolicy-2016-08"
+  certificate_arn    = aws_acm_certificate.acm_certificate.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_target_group.arn
+  }
 }
