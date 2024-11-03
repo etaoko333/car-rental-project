@@ -23,12 +23,8 @@ resource "aws_security_group" "alb_security_group" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = -1
+    protocol    = "-1"  # Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-alb-sg"
   }
 }
 
@@ -39,22 +35,17 @@ resource "aws_security_group" "bastion_security_group" {
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
-    description = "SSH access"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.ssh_location] # Define `ssh_location` to restrict access
+    cidr_blocks = ["0.0.0.0/0"]  // Allow SSH from anywhere
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = -1
+    protocol    = "-1"  // Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-bastion-sg"
   }
 }
 
@@ -83,12 +74,8 @@ resource "aws_security_group" "app_server_security_group" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = -1
+    protocol    = "-1"  // Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-app-server-sg"
   }
 }
 
@@ -117,11 +104,7 @@ resource "aws_security_group" "database_security_group" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = -1
+    protocol    = "-1"  // Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-database-sg"
   }
 }
