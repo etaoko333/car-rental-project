@@ -30,22 +30,26 @@ resource "aws_security_group" "alb_security_group" {
 
 # Security group for Bastion Host
 resource "aws_security_group" "bastion_security_group" {
-  name        = "${var.project_name}-${var.environment}-bastion-sg"
-  description = "Enable SSH access on port 22"
+  name        = "bastion-sg"
+  description = "Allow SSH access to Bastion host"
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  // Allow SSH from anywhere
+    cidr_blocks = ["0.0.0.0/0"]  # Allow access from any IP (temporary)
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"  // Allow all outbound traffic
+    protocol    = "-1"  # Allow all outbound traffic
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Bastion Security Group"
   }
 }
 
