@@ -1,19 +1,21 @@
 # request public certificates from the amazon certificate manager.
-# You are requiered to have a domain name registered in route53
-resource "aws_acm_certificate" "acm_certificate" {
-  domain_name               = var.domain_name
-  subject_alternative_names = [var.alternative_names]
-  validation_method         = "DNS"
 
-  lifecycle {
-    create_before_destroy = true
+resource "aws_acm_certificate" "acm_certificate" {
+  domain_name = "eta-oko.com"  # Replace with your actual domain
+  validation_method = "DNS"
+
+  subject_alternative_names = [
+    "*.eta-oko.com"  # If you need a wildcard certificate
+  ]
+
+  tags = {
+    Name = "ACM Certificate for eta-oko.com"
   }
 }
-
+  
 # get details about a route 53 hosted zone
 data "aws_route53_zone" "route53_zone" {
-  name         = var.domain_name
-  private_zone = false
+  zone_id = "Z0313232XJD76NI3Q86M"  # Replace with your actual zone ID
 }
 
 # create a record set in route 53 for domain validatation
