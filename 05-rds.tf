@@ -13,7 +13,21 @@ resource "aws_db_subnet_group" "database_subnet_group" {
   }
 }
 
+# # Define MySQL Parameter Group for RDS
+resource "aws_db_parameter_group" "mysql_parameter_group" {
+  name        = "mysql-para-group"
+  family      = "mysql8.0"
+  description = "MySQL Parameter Group"
+
+  parameter {
+    name  = "max_connections"
+    value = "200"
+  }
+}
+
+
 # Create the RDS instance
+# Option 1: Remove db_parameter_group_name (using default)
 resource "aws_db_instance" "dev_rds_db" {
   identifier              = "dev-rds-db"
   engine                  = "mysql"
@@ -30,11 +44,7 @@ resource "aws_db_instance" "dev_rds_db" {
   db_name                 = "applicationdb"
   storage_encrypted       = true
   backup_retention_period = 7
-  parameter_group_name    = "mysql_para_group_name" 
 
-  lifecycle {
-    create_before_destroy = true
-  }
 
   tags = {
     Name = "dev-rds-db"
