@@ -1,4 +1,4 @@
-# Website URL output
+# website url
 output "website_url" {
-  value = format("https://%s.%s", var.record_name, var.domain_name)
+  value     = join ("", ["https://", var.record_name, ".", var.domain_name])
 }
