@@ -39,8 +39,8 @@ resource "aws_db_instance" "dev_rds_db" {
   db_subnet_group_name    = aws_db_subnet_group.database_subnet_group.name
   vpc_security_group_ids  = [aws_security_group.database_security_group.id]
   multi_az                = true 
-  username                = var.db_master_username
-  password                = var.db_master_password
+  username                ="admin"
+  password                = "olusola123"
   db_name                 = "applicationdb"
   storage_encrypted       = true
   backup_retention_period = 7
