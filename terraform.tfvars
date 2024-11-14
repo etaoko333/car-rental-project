@@ -1,5 +1,5 @@
 # environment variables
-region="eu-west-2"
+region="eu-west-1"
 project_name="autorentify"
 environment="dev" 
 
@@ -15,8 +15,8 @@ private_data_subnet_az2_cidr="10.0.5.0/24"
 # Security groups variable
 ssh_location="your ip address" 
 
-db_master_username = "mydbadmin"
-db_master_password = "MySecurePassword123!"
+db_master_username = "admin"
+db_master_password = "olusola123"
 
 
 # acm variables
