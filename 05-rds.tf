@@ -25,9 +25,6 @@ resource "aws_db_parameter_group" "mysql_parameter_group" {
   }
 }
 
-
-# Create the RDS instance
-# Option 1: Remove db_parameter_group_name (using default)
 resource "aws_db_instance" "dev_rds_db" {
   identifier              = "dev-rds-db"
   engine                  = "mysql"
@@ -39,14 +36,10 @@ resource "aws_db_instance" "dev_rds_db" {
   db_subnet_group_name    = aws_db_subnet_group.database_subnet_group.name
   vpc_security_group_ids  = [aws_security_group.database_security_group.id]
   multi_az                = true 
-  username                ="admin"
+  username                = "admin"
   password                = "olusola123"
   db_name                 = "applicationdb"
   storage_encrypted       = true
   backup_retention_period = 7
-
-
-  tags = {
-    Name = "dev-rds-db"
-  }
+  publicly_accessible     = true  # Add this to make the RDS instance publicly accessible
 }
