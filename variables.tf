@@ -68,44 +68,57 @@ variable "db_master_password" {
   type        = string
 }
 
-# ACM variables
+# acm variables
 variable "domain_name" {
-  description = "The domain name to request the certificate for."
-  type        = string
-  default     = "eta-oko.com"  # Your main domain
+  description = "domain name"
+  type = string
 }
 
 variable "alternative_names" {
-  description = "List of alternative names for the certificate."
-  type        = list(string)  # Ensure this is a list of strings
-  default     = ["www.eta-oko.com", "*.eta-oko.com"]  # Include main subdomain and wildcard for all subdomains
+  description = "sub domain name"
+  type = string
 }
-
 
 # S3 variables
 variable "env_file_bucket_name" {
-  description = "S3 bucket name"
-  type        = string
+  description = "s3 bucket name"
+  type = string
 }
 
 variable "env_file_name" {
-  description = "Environment file name"
-  type        = string
+  description = "env file name"
+  type = string
 }
 
 # ECS variables
 variable "architecture" {
-  description = "ECS CPU architecture"
-  type        = string
+  description = "ecs cpu architecture"
+  type = string
 }
 
 variable "container_image" {
-  description = "Container image URI"
+  description = "container image uri"
+  type = string
+}
+
+# Route53 variables
+variable "record_name" {
+  description = "sub domain name"
+  type = string
+}
+
+# ECS specific variables
+variable "ecr_account_id" {
+  description = "The AWS ECR account ID"
   type        = string
 }
 
-# Route 53 variables
-variable "record_name" {
-  description = "Subdomain name"
+variable "repository_name" {
+  description = "The name of the ECR repository"
+  type        = string
+}
+
+variable "image_tag" {
+  description = "The tag for the container image"
   type        = string
 }
