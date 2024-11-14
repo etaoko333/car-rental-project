@@ -10,7 +10,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 # create cloudwatch log group
 resource "aws_cloudwatch_log_group" "log_group" {
-  name = "/ecs/${var.project_name}-${var.environment}-tags-definition" # change to task-definition
+  name = "/ecs/${var.project_name}-${var.environment}-task-definition" # updated to task-definition
 
   lifecycle {
     create_before_destroy = true
@@ -19,7 +19,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 
 # create task definition
 resource "aws_ecs_task_definition" "ecs_task_definition" {
-  family                    = "${var.project_name}-${var.environment}-tags-definition" # change to task-definition
+  family                    = "${var.project_name}-${var.environment}-task-definition"  # updated to task-definition
   execution_role_arn        = aws_iam_role.ecs_task_execution_role.arn
   network_mode              = "awsvpc"
   requires_compatibilities  = ["FARGATE"]
@@ -32,36 +32,30 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   }
 
   # create container definition
-  container_definitions     = jsonencode([
-    {
-      name                  = "${var.project_name}-${var.environment}-container"
-      image                 = "${var.container_image}"
-      essential             = true
+  container_definitions = jsonencode([{
+    name        = "${var.project_name}-${var.environment}-container"
+    image       = "${var.ecr_account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.repository_name}:${var.image_tag}"  # corrected image URL
+    essential   = true
 
-      portMappings          = [
-        {
-          containerPort     = 80
-          hostPort          = 80
-        }
-      ]
+    portMappings = [{
+      containerPort = 80
+      hostPort      = 80
+    }]
 
-      environmentFiles = [
-        {
-          value = "arn:aws:s3:::${var.project_name}-${var.env_file_bucket_name}/${var.env_file_name}"
-          type  = "s3"
-        }
-      ]
-      
-      logConfiguration = {
-        logDriver      = "awslogs",
-        options        = {
-          "awslogs-group"          = "${aws_cloudwatch_log_group.log_group.name}",
-          "awslogs-region"         = "${var.region}",
-          "awslogs-stream-prefix"  = "ecs"
-        }
+    environmentFiles = [{
+      value = "arn:aws:s3:::${var.project_name}-${var.env_file_bucket_name}/${var.env_file_name}"
+      type  = "s3"
+    }]
+    
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        "awslogs-group"         = "${aws_cloudwatch_log_group.log_group.name}"
+        "awslogs-region"        = "${var.region}"
+        "awslogs-stream-prefix" = "ecs"
       }
     }
-  ])
+  }])
 }
 
 # create ecs service
@@ -71,7 +65,7 @@ resource "aws_ecs_service" "ecs_service" {
   cluster                            = aws_ecs_cluster.ecs_cluster.id
   task_definition                    = aws_ecs_task_definition.ecs_task_definition.arn
   platform_version                   = "LATEST"
-  desired_count                      = 2 #m eans we desire 2 containers
+  desired_count                      = 2  # means we desire 2 containers
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
 
